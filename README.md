@@ -24,5 +24,6 @@ Context and Inference baseD ontology alignER.
 
 - This aligner is not intended to operate with large ontologies.
 
-
+----------
+This version is under development. You can find the last working version of the aligner [here](https://github.com/jogracia/cider-cl).
 
