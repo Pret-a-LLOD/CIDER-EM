@@ -24,6 +24,8 @@ Context and Inference baseD ontology alignER.
 
 - This aligner is not intended to operate with large ontologies.
 
+### Word Embeddings
+You can download some word embeddings [here](https://drive.google.com/drive/folders/188jUDHGBYrLYKLbVTVY0mmsT8OgvojW5?usp=sharing).
 ----------
 This version is under development. You can find the last working version of the aligner [here](https://github.com/jogracia/cider-cl).
 
