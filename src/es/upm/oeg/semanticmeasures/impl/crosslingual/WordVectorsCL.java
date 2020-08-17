@@ -2,7 +2,6 @@ package es.upm.oeg.semanticmeasures.impl.crosslingual;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -13,21 +12,20 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import es.upm.oeg.semanticmeasures.Relatedness;
 
 /** 
- * Defines the basic methods to operate with the CL-ESA metric. 
- * CL-ESA implementation (wsd.jar) by Kartik Asooja for the Monnet project 
  * 
- * @author Jorge Gracia
- * @author Kartik Asooja
+ * 
+ * 
+ * @author 
  *
  */
 public abstract class WordVectorsCL implements Relatedness{
 	
 	private static Logger log = Logger.getLogger(WordVectorsCL.class);	
 	
-	private static final String SRC_VECTORS_PATH = "././embeddings/mapped/SRC_MAPPED_unsupervised_en.EMB";
-	private static final Word2Vec src_vector = WordVectorSerializer.readWord2VecModel(SRC_VECTORS_PATH);
-	private static final String TRG_VECTORS_PATH = "././embeddings/mapped/TRG_MAPPED_unsupervised_es.EMB";
-	private static final Word2Vec trg_vector = WordVectorSerializer.readWord2VecModel(TRG_VECTORS_PATH);
+	//private static final String SRC_VECTORS_PATH = "./embeddings/crosslingual/en-es/SRC_MAPPED_en.EMB";
+	//private static final Word2Vec src_vector = WordVectorSerializer.readWord2VecModel(SRC_VECTORS_PATH);
+	//private static final String TRG_VECTORS_PATH = "./embeddings/crosslingual/en-es/TRG_MAPPED_es.EMB";
+	//private static final Word2Vec trg_vector = WordVectorSerializer.readWord2VecModel(TRG_VECTORS_PATH);
 	
     private Word2Vec src_vec;
     private String langS;
@@ -35,8 +33,12 @@ public abstract class WordVectorsCL implements Relatedness{
     private String langT;
 	
 	public WordVectorsCL(String langS, String langT){		
-		this.src_vec = src_vector;
-		this.trg_vec = trg_vector;
+		//this.src_vec = src_vector;
+		String SRC_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/SRC_MAPPED_" + langS + ".EMB";
+		this.src_vec = WordVectorSerializer.readWord2VecModel(SRC_VECTORS_PATH);
+		//this.trg_vec = trg_vector;
+		String TRG_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/TRG_MAPPED_" + langT + ".EMB";
+		this.trg_vec = WordVectorSerializer.readWord2VecModel(TRG_VECTORS_PATH);
 		this.langS = langS;
 		this.langT = langT;
 	}
@@ -69,12 +71,9 @@ public abstract class WordVectorsCL implements Relatedness{
 		ArrayList<String> wordsInModel = new ArrayList<>();			
 		if(vec != null) {
 			for(String w : words) {				
-				if(vec.hasWord(w)) {
-					System.out.println("vector de " + w + ": " + Arrays.toString(vec.getWordVector(w)));
-					wordsInModel.add(w);
-				}					
+				if(vec.hasWord(w)) 
+					wordsInModel.add(w);					
 			}	
-			System.out.println(Arrays.toString(wordsInModel.toArray()));		
 			if(!wordsInModel.isEmpty()) 
 					meanVector = vec.getWordVectorsMean(wordsInModel);	
 		}		

@@ -63,24 +63,18 @@ import fr.inrialpes.exmo.ontowrap.OntowrapException;
 		
     	setSimilarity( new SimMatrixMeasure() );
 		setType("11");  
-		System.out.println("1");
 		// Load initial features files if the files already exist
 		File f_class = new File(CLASS_FEATURES_FILE);
 		File f_prop = new File(PROP_FEATURES_FILE);		
-		System.out.println("2");
 		//If features files do not exist their skeletons are created
-		if (!f_class.exists()) {	
+		if (!f_class.exists()) 	
 			SkeletonFeaturesFileCreator.defineDatasetOfClasses(CLASS_FEATURES_FILE);
-			System.out.println("3");
-		}
-		System.out.println("3");
 		try {
 			dataset_class = DataSource.read(CLASS_FEATURES_FILE);
 		} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
-		System.out.println("4");
 		if (!f_prop.exists()) SkeletonFeaturesFileCreator.defineDatasetOfProperties(PROP_FEATURES_FILE);
 		
 		try {
@@ -89,10 +83,8 @@ import fr.inrialpes.exmo.ontowrap.OntowrapException;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
-		System.out.println("5");
 		// Create list of aligned URIs
 		this.alignedURIs = createSetFromRefAlignmentFile(REF_ALIGNMENTS_FILE);
-		System.out.println("6");
 		sim = new CLEmbeddingsBasedFeaturesDataCreator(dataset_class, dataset_prop, alignedURIs, langS, langT);
 		System.out.println("7");
     }

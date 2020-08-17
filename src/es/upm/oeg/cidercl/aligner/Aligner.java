@@ -165,8 +165,8 @@ public class Aligner extends DistanceAlignment implements AlignmentProcess {
  
 	if (languages1.isEmpty() || languages2.isEmpty() || languages1.equals(languages2)) {
 		sim = new CosineSimilarityBetweenOntologyEntities(language1);
-//		SoftTFIDFBetweenOntologyEntities.setCorpusFromOntologies(strOnt1, strOnt2);
-	} else sim = new CosineSimilarityCLBetweenOntologyEntities(language1,language2);
+	} else 
+		sim = new CosineSimilarityCLBetweenOntologyEntities(language1,language2);
         	
 	// Initialize matrix
 	getSimilarity().initialize( ontology1(), ontology2());
