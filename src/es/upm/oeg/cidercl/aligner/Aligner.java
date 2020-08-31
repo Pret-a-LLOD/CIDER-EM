@@ -36,6 +36,9 @@ import fr.inrialpes.exmo.align.impl.DistanceAlignment;
 import fr.inrialpes.exmo.align.impl.MatrixMeasure;
 import fr.inrialpes.exmo.ontowrap.OntowrapException;
 
+//import org.bytedeco.javacpp.Loader;
+//import org.nd4j.nativeblas.Nd4jCpu;
+
 /** The class for ontology alignment of CIDER-CL. It is run 
  * by using fr.inrialpes.exmo.align.util.Procalign, which is contained in cidercl.jar.
  * The processor will parse ontologies, align them
@@ -151,6 +154,22 @@ public class Aligner extends DistanceAlignment implements AlignmentProcess {
 //	}
 //	public void align() throws AlignmentException {
 
+    // Debido a problemas de inicializacion de librerias
+//	try {
+//		Loader.load(Nd4jCpu.class);
+//	} catch (UnsatisfiedLinkError e) {
+//	    try {
+//	    	String  path = Loader.cacheResource(Nd4jCpu.class, "windows-x86_64/jnind4jcpu.dll").getPath();
+//	    	System.out.println(path);
+//			new ProcessBuilder("C://Users//Marta//Downloads//Dependencies_x64_Release//DependenciesGui.exe", path).start().waitFor();
+//			System.out.println("no encuentro 3");
+//		} catch (InterruptedException | IOException e1) {
+//			// TODO Auto-generated catch block
+//			System.out.println("no encuentro 4");
+//			e1.printStackTrace();
+//		}
+//	} 
+    
     // Choose between monolingual/crosslingual measure
     String strOnt1 = ontology1().getFile().toString();
 	HashSet<String> languages1 = OntologyExtractor.getAllLanguages(OntologyExtractor.modelObtaining(strOnt1));

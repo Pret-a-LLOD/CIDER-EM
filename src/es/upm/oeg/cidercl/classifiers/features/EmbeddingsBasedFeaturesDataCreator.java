@@ -32,7 +32,7 @@ public class EmbeddingsBasedFeaturesDataCreator extends CosineSimilarityBetweenO
 	HashSet<String> alignedURIs;
 	Word2Vec vec;
 	
-	public EmbeddingsBasedFeaturesDataCreator(Instances classFeaturesDataset, Instances propFeaturesDataset, HashSet<String> alignedURIsSet, String lang){
+	public EmbeddingsBasedFeaturesDataCreator(Instances classFeaturesDataset, Instances propFeaturesDataset, HashSet<String> alignedURIsSet, String lang) {
 		super(lang);
 		this.class_features = classFeaturesDataset;
 		this.property_features = propFeaturesDataset;

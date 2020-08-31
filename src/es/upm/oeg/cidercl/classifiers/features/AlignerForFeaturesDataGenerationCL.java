@@ -38,8 +38,8 @@ import fr.inrialpes.exmo.ontowrap.OntowrapException;
   
 	private static Logger log = Logger.getLogger(AlignerForFeaturesDataGenerationCL.class);
 
-	static final String CLASS_FEATURES_FILE = "./ANN/ClassFeaturesFileCL.arff";
-	static final String PROP_FEATURES_FILE = "./ANN/PropFeaturesFileCL.arff";
+	static final String CLASS_FEATURES_FILE = "./ANN/ClassFeaturesFile.arff";
+	static final String PROP_FEATURES_FILE = "./ANN/PropFeaturesFile.arff";
 	static final String REF_ALIGNMENTS_FILE = "./ANN/refalignCL.csv";
 	
 	Instances dataset_class;
@@ -86,7 +86,7 @@ import fr.inrialpes.exmo.ontowrap.OntowrapException;
 		// Create list of aligned URIs
 		this.alignedURIs = createSetFromRefAlignmentFile(REF_ALIGNMENTS_FILE);
 		sim = new CLEmbeddingsBasedFeaturesDataCreator(dataset_class, dataset_prop, alignedURIs, langS, langT);
-		System.out.println("7");
+
     }
     
     
