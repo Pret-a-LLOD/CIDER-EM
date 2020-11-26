@@ -14,7 +14,7 @@ import weka.filters.unsupervised.attribute.Remove;
 import weka.filters.unsupervised.instance.RemoveRange;
 
 /**
-  Class to create and train the neural networks that will be used by CIDER-EM. 
+  Class to create and train the neural networks that will be used by CIDER-CL. 
   To be run from command line:
  <pre>
     ANNsCreatorAndTrainer [class_features_file prop_features_file class_ann prop_ann flag_balanced]
@@ -31,7 +31,7 @@ import weka.filters.unsupervised.instance.RemoveRange;
 	
   Example of usage: 
 <pre>
-  java -cp  ciderem.jar es.upm.oeg.cidercl.classifiers.ann.ANNsCreatorAndTrainer  "./ANN/ClassFeaturesFile.arff" "./ANN/PropFeaturesFile.arff" "./ANN/ANN_class.model" "./ANN/ANN_prop.model" "false"
+  java -cp  cidercl.jar es.upm.oeg.cidercl.classifiers.ann.ANNsCreatorAndTrainer  "./ANN/ClassFeaturesFile.arff" "./ANN/PropFeaturesFile.arff" "./ANN/ANN_class.model" "./ANN/ANN_prop.model" "false"
 </pre>
   
   @author Jorge Gracia

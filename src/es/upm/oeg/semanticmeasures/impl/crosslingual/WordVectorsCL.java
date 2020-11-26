@@ -3,24 +3,17 @@ package es.upm.oeg.semanticmeasures.impl.crosslingual;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import es.upm.oeg.cidercl.util.StopWords;
 import es.upm.oeg.semanticmeasures.Relatedness;
+import eu.monnetproject.wsd.utils.Language;
 
-/** 
- * 
- * 
- * 
- * @author 
- *
- */
+
 public abstract class WordVectorsCL implements Relatedness{
-	
-	private static Logger log = Logger.getLogger(WordVectorsCL.class);	
 	
 	//private static final String SRC_VECTORS_PATH = "./embeddings/crosslingual/en-es/SRC_MAPPED_en.EMB";
 	//private static final Word2Vec src_vector = WordVectorSerializer.readWord2VecModel(SRC_VECTORS_PATH);
@@ -70,13 +63,22 @@ public abstract class WordVectorsCL implements Relatedness{
 		INDArray meanVector = null;
 		ArrayList<String> wordsInModel = new ArrayList<>();			
 		if(vec != null) {
+			StopWords stopWords = new StopWords();
 			for(String w : words) {				
-				if(vec.hasWord(w)) 
-					wordsInModel.add(w);					
-			}	
-			if(!wordsInModel.isEmpty()) 
-					meanVector = vec.getWordVectorsMean(wordsInModel);	
+				if(vec.hasWord(w)) wordsInModel.add(w);	
+				else {
+					String [] array = w.split("(?=\\p{Upper})");
+					if (array.length >1) {						
+						for (String a : array){
+							a  = stopWords.removeStopWords(new Language(lang), a);
+							if(!a.equals("") && vec.hasWord(a)) wordsInModel.add(a);
+						}
+					}					
+				}
+			}
 		}		
+		if(!wordsInModel.isEmpty()) meanVector = vec.getWordVectorsMean(wordsInModel);	
+		
 		return meanVector;
 	}
 

@@ -32,7 +32,7 @@ public class EmbeddingsBasedFeaturesDataCreator extends CosineSimilarityBetweenO
 	HashSet<String> alignedURIs;
 	Word2Vec vec;
 	
-	public EmbeddingsBasedFeaturesDataCreator(Instances classFeaturesDataset, Instances propFeaturesDataset, HashSet<String> alignedURIsSet, String lang) {
+	public EmbeddingsBasedFeaturesDataCreator(Instances classFeaturesDataset, Instances propFeaturesDataset, HashSet<String> alignedURIsSet, String lang){
 		super(lang);
 		this.class_features = classFeaturesDataset;
 		this.property_features = propFeaturesDataset;
@@ -55,69 +55,89 @@ public class EmbeddingsBasedFeaturesDataCreator extends CosineSimilarityBetweenO
 		
 		if (r1.isClass() && r2.isClass()){
 		
-			double[] values = new double[class_features.numAttributes()];
-			
+			double[] values = new double[class_features.numAttributes()];			
 			values[0] = class_features.attribute(0).addStringValue((String) element1);
 			values[1] = class_features.attribute(1).addStringValue((String) element2);
-			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+			
+//			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
 //			values[3] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[3] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[4] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[5] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[6] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[7] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[8] = getScoreBetweenPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[9] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[10] = getScoreBetweenRelatedClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);			
-		
+//			values[4] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[5] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[6] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[7] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[8] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[9] = getScoreBetweenPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[10] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[11] = getScoreBetweenRelatedClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);			
+//			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
+//			for (int i=2; i<=10; i++){
+//				if (values[i] == -1.0d) 
+//					values[i] = Utils.missingValue();
+//			}
+//			if (alignedURIs.contains((String) element1 + (String) element2) || (alignedURIs.contains((String) element2 + (String) element1)))
+//				values[12] = 1.0;
+//			else	
+//				values[12] = 0.0;		
+			
+			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+			values[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			values[4] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			values[5] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+			values[6] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
 			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
-			for (int i=2; i<=10; i++){
+			for (int i=2; i<=6; i++){
 				if (values[i] == -1.0d) 
 					values[i] = Utils.missingValue();
-			}
-			
+			}			
 			if (alignedURIs.contains((String) element1 + (String) element2) || (alignedURIs.contains((String) element2 + (String) element1)))
-				values[12] = 1.0;
+				values[7] = 1.0;
 			else	
-				values[12] = 0.0;
+				values[7] = 0.0;			
 			
-			
-			Instance inst = new DenseInstance(1.0, values);
-			
+			Instance inst = new DenseInstance(1.0, values);			
 			this.class_features.add(inst);
 		
 		} else if (r1.isProperty() && r2.isProperty()){
 			
-			double[] values = new double[property_features.numAttributes()];
-			
+			double[] values = new double[property_features.numAttributes()];			
 			values[0] = property_features.attribute(0).addStringValue((String) element1);
 			values[1] = property_features.attribute(1).addStringValue((String) element2);
-			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+			
+//			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
 //			values[3] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[3] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[4] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[5] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[6] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			values[7] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[8] = getScoreBetweenDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[9] = getScoreBetweenDirectDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			values[10] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-
+//			values[4] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[5] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[6] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[7] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			values[8] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[9] = getScoreBetweenDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[10] = getScoreBetweenDirectDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			values[11] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
+//			for (int i=2; i<=10; i++){
+//				if (values[i] == -1.0d) 
+//					values[i] = Utils.missingValue();
+//			}			
+//			if (alignedURIs.contains((String) element1 + (String) element2) || (alignedURIs.contains((String) element2 + (String) element1)))
+//				values[12] = 1.0;
+//			else	
+//				values[12] = 0.0;
+			
+			values[2] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+			values[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			values[4] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
 			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
-			for (int i=2; i<=10; i++){
+			for (int i=2; i<=4; i++){
 				if (values[i] == -1.0d) 
 					values[i] = Utils.missingValue();
-			}
-			
+			}			
 			if (alignedURIs.contains((String) element1 + (String) element2) || (alignedURIs.contains((String) element2 + (String) element1)))
-				values[12] = 1.0;
+				values[5] = 1.0;
 			else	
-				values[12] = 0.0;
+				values[5] = 0.0;
 			
-			Instance inst = new DenseInstance(1.0, values);
-			
-			this.property_features.add(inst);
-				
+			Instance inst = new DenseInstance(1.0, values);			
+			this.property_features.add(inst);				
 		} 
 			
 		return -1;	//during features computation the total score is meaningless

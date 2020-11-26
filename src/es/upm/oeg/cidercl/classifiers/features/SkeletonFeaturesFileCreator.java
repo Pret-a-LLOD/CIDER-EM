@@ -24,21 +24,21 @@ public class SkeletonFeaturesFileCreator {
 	Instances dataset_prop;
 
 	static public void defineDatasetOfClasses(String classFeaturesFilePath){
-	    	
+		
 	    	//DEFINING DATASET IN MEMORY
 			ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 			attributes.add(new Attribute("URI1", (ArrayList<String>) null));
 			attributes.add(new Attribute("URI2", (ArrayList<String>) null));
 			attributes.add(new Attribute("SIM1-labels"));
-			attributes.add(new Attribute("SIM2-comments"));
-			attributes.add(new Attribute("SIM3-equiv"));		
+			//attributes.add(new Attribute("SIM2-comments"));
+			//attributes.add(new Attribute("SIM3-equiv"));		
 			attributes.add(new Attribute("SIM4-sub"));
-			attributes.add(new Attribute("SIM5-super"));		
+			//attributes.add(new Attribute("SIM5-super"));		
 			attributes.add(new Attribute("SIM6-directSuper"));
 			attributes.add(new Attribute("SIM7-directSub"));
-			attributes.add(new Attribute("SIM8-prop"));
+			//attributes.add(new Attribute("SIM8-prop"));
 			attributes.add(new Attribute("SIM9-directProp"));
-			attributes.add(new Attribute("SIM10-related"));
+			//attributes.add(new Attribute("SIM10-related"));
 			attributes.add(new Attribute("reference"));
 
 	    	log.info("Features file structure defined (classes)");
@@ -57,20 +57,20 @@ public class SkeletonFeaturesFileCreator {
 	 }
 	    
 	 static  public void defineDatasetOfProperties(String propFeaturesFilePath){
-	    	
+		 
 	    	//DEFINING DATASET IN MEMORY
 			ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 			attributes.add(new Attribute("URI1", (ArrayList<String>) null));
 			attributes.add(new Attribute("URI2", (ArrayList<String>) null));
 			attributes.add(new Attribute("SIM1-labels"));
-			attributes.add(new Attribute("SIM2-comments"));
-			attributes.add(new Attribute("SIM3-equiv"));		
+			//attributes.add(new Attribute("SIM2-comments"));
+			//attributes.add(new Attribute("SIM3-equiv"));		
 			attributes.add(new Attribute("SIM4-sub"));
-			attributes.add(new Attribute("SIM5-super"));		
-			attributes.add(new Attribute("SIM6-directSuper"));
-			attributes.add(new Attribute("SIM7-directSub"));
-			attributes.add(new Attribute("SIM8-dom"));
-			attributes.add(new Attribute("SIM9-directDom"));
+			//attributes.add(new Attribute("SIM5-super"));		
+			//attributes.add(new Attribute("SIM6-directSuper"));
+			//attributes.add(new Attribute("SIM7-directSub"));
+			//attributes.add(new Attribute("SIM8-dom"));
+			//attributes.add(new Attribute("SIM9-directDom"));
 			attributes.add(new Attribute("SIM10-ranges"));
 			attributes.add(new Attribute("reference"));
 

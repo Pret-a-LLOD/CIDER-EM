@@ -21,9 +21,6 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 /**
  * Computes the semantic similarity between two ontology entities based on the Cosine Similarity metric
- * 
- * @author Jorge Gracia, Marta Lanau
- *
  */
 public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL implements RelatednessBetweenOntologyEntities{
 
@@ -48,23 +45,25 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 		ArrayList<String> labelsSource = OntologyExtractor.getLabels(model1, uri1, null); //'language' is null so it retrieves labels in all the languages
 		if (labelsSource.isEmpty()) 
 			labelsSource.add(OntologyExtractor.getUriFragment(model1, uri1)); 				
-		
 		ArrayList<String> labelsTarget = OntologyExtractor.getLabels(model2, uri2, null);
 		if (labelsTarget.isEmpty()) 
 			labelsTarget.add(OntologyExtractor.getUriFragment(model2, uri2));
-		INDArray meanVectorLabelsSource = getMeanVectorFromWords(labelsSource, getLangS());
-		INDArray meanVectorLabelsTarget = getMeanVectorFromWords(labelsTarget, getLangT());
-		if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
-			return DEFAULT_SCORE;
-		else		
-			return Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);	
+		if (labelsSource.equals(labelsTarget)) {
+			return 1;
+		}else {
+			INDArray meanVectorLabelsSource = getMeanVectorFromWords(labelsSource, getLangS());
+			INDArray meanVectorLabelsTarget = getMeanVectorFromWords(labelsTarget, getLangT());
+			if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
+				return DEFAULT_SCORE;
+			else		
+				return Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);	
+		}
 	}	
 	
 	public double getScoreBetweenComments(OntModel model1, String uri1, OntModel model2, String uri2){
 		// Retrieve all the comments
 		ArrayList<String> commentsSource = OntologyExtractor.getComments(model1, uri1, null); //language is null so it retrieves comments in all the languages
 		ArrayList<String> commentsTarget = OntologyExtractor.getComments(model2, uri2, null);
-				
 		if (commentsSource.equals("") || commentsTarget.equals("") || commentsSource.isEmpty() || commentsTarget.isEmpty()) 
 			return DEFAULT_SCORE;
 		else {			
@@ -76,18 +75,19 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 				allCommentsTarget += " " + ct;						
 			StopWords stopWords = new StopWords();			
 			allCommentsSource = stopWords.removeStopWords(new Language(getLangS()), allCommentsSource);
-			allCommentsTarget = stopWords.removeStopWords(new Language(getLangT()), allCommentsTarget);
-			
+			allCommentsTarget = stopWords.removeStopWords(new Language(getLangT()), allCommentsTarget);			
 			commentsSource = new ArrayList<String>(Arrays.asList(allCommentsSource.split("\\s")));
 			commentsTarget = new ArrayList<String>(Arrays.asList(allCommentsTarget.split("\\s")));
-			
-			INDArray meanVectorLabelsSource = getMeanVectorFromWords(commentsSource, getLangS());
-			INDArray meanVectorLabelsTarget = getMeanVectorFromWords(commentsTarget, getLangT());	
-			
-			if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
-				return DEFAULT_SCORE;
-			else
-				return Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);
+			if (commentsSource.equals(commentsTarget))
+				return 1;
+			else {
+				INDArray meanVectorLabelsSource = getMeanVectorFromWords(commentsSource, getLangS());
+				INDArray meanVectorLabelsTarget = getMeanVectorFromWords(commentsTarget, getLangT());	
+				if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
+					return DEFAULT_SCORE;
+				else
+					return Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);
+			}
 		}
 	}
 	
@@ -140,12 +140,12 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 		return scoreBetweenSetsOfURIs(model1, sourceURIs, model2, targetURIs);
 	}
 	
-	private double getSoftTFIDFBetweenRangesOfObjectProperties(OntModel model1, String uri1, OntModel model2, String uri2){
+	private double getScoreBetweenRangesOfObjectProperties(OntModel model1, String uri1, OntModel model2, String uri2){
 		OntResource r1 = (OntResource) ((OntModel) model1).getOntResource((String) uri1);
 		OntResource r2 = (OntResource) ((OntModel) model2).getOntResource((String) uri2);
 		if (r1.isObjectProperty() && r2.isObjectProperty()){
 			ArrayList<String> sourceURIs = OntologyExtractor.getRangesOfObjectProperty(model1, uri1);
-			ArrayList<String> targetURIs = OntologyExtractor.getRangesOfObjectProperty(model2, uri2);	
+			ArrayList<String> targetURIs = OntologyExtractor.getRangesOfObjectProperty(model2, uri2);
 			return scoreBetweenSetsOfURIs(model1, sourceURIs, model2, targetURIs);	
 		} else return 0.0;
 	}
@@ -171,7 +171,7 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 		OntResource r1 = (OntResource) ((OntModel) model1).getOntResource((String) uri1);
 		OntResource r2 = (OntResource) ((OntModel) model2).getOntResource((String) uri2);	
 		if (r1.isObjectProperty() && r2.isObjectProperty()){
-			return getSoftTFIDFBetweenRangesOfObjectProperties(model1, uri1, model2, uri2);
+			return getScoreBetweenRangesOfObjectProperties(model1, uri1, model2, uri2);
 		} else if (r1.isDatatypeProperty() && r2.isDatatypeProperty()){
 			return getSimilarityBetweenRangesOfDatatypeProperties(model1, uri1, model2, uri2);
 		}
@@ -211,19 +211,22 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 					if (termLabels.isEmpty()) termLabels.add(OntologyExtractor.getUriFragment(model2, urisTarget.get(i))); 
 					termsLabelsTarget.addAll(termLabels);
 				}				
-				INDArray meanVectorLabelsSource = getMeanVectorFromWords(termsLabelsSource, getLangS());
-				INDArray meanVectorLabelsTarget = getMeanVectorFromWords(termsLabelsTarget, getLangT());
-				// Compute Cosine Similarity				
-				if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
-					score = DEFAULT_SCORE;
-				else
-					score = Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);	
+				if (termsLabelsSource.equals(termsLabelsTarget))
+					return 1;
+				else {
+					INDArray meanVectorLabelsSource = getMeanVectorFromWords(termsLabelsSource, getLangS());
+					INDArray meanVectorLabelsTarget = getMeanVectorFromWords(termsLabelsTarget, getLangT());
+					// Compute Cosine Similarity				
+					if(meanVectorLabelsSource==null || meanVectorLabelsTarget==null)
+						score = DEFAULT_SCORE;
+					else
+						score = Transforms.cosineSim(meanVectorLabelsSource, meanVectorLabelsTarget);
+				}
 			}			
 		}
 		return score;		
 	}
 	
-
 	
 	/**
 	 * Computes the embeddings-based value of the relatedness between two entities from two ontologies.
@@ -248,23 +251,35 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 			return 1.0;
 		}				
 		if (r1.isClass() && r2.isClass()){	
-			Instance instance;		
-			double[] sim = new double[10];
+			Instance instance;	
 			
+//			double[] sim = new double[10];
+//			sim[0] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+//			sim[1] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[2] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[4] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[5] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[6] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[7] = getScoreBetweenPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[8] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[9] = getScoreBetweenRelatedClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
+//			for (int i=0; i<=9; i++){
+//				if (sim[i] == -1.0d) {
+//					sim[i] = Utils.missingValue();
+//					System.out.println("sim[" + i + "] " + sim[i]);
+//				}
+//			}
+			
+			double[] sim = new double[5];			
 			sim[0] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
-			sim[1] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[2] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[4] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[5] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[6] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[7] = getScoreBetweenPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[8] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[9] = getScoreBetweenRelatedClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-
-			System.out.println("Sim: " + Arrays.toString(sim));
+			sim[1] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			sim[2] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			sim[3] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+			sim[4] = getScoreBetweenDirectPropertiesOfClasses((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
 			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
-			for (int i=0; i<=9; i++){
+			for (int i=0; i<=4; i++){
 				if (sim[i] == -1.0d) {
 					sim[i] = Utils.missingValue();
 					System.out.println("sim[" + i + "] " + sim[i]);
@@ -279,26 +294,38 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 			
 		} else if (r1.isProperty() && r2.isProperty()){	
 			Instance instance;
-			double[] sim = new double[10];
 			
+//			double[] sim = new double[10];
+//			sim[0] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
+//			sim[1] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[2] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[4] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[5] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			sim[6] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[7] = getScoreBetweenDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[8] = getScoreBetweenDirectDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
+//			sim[9] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+//			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
+//			for (int i=0; i<=9; i++){
+//				if (sim[i] == -1.0d) {
+//					sim[i] = Utils.missingValue();
+//					System.out.println("sim[" + i + "] " + sim[i]);
+//				}
+//			}
+			
+			double[] sim = new double[3];			
 			sim[0] = getScoreBetweenLabels((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);  
-			sim[1] = getScoreBetweenComments((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[2] = getScoreBetweenEquivalentTerms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[3] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[4] = getScoreBetweenSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[5] = getScoreBetweenDirectSuperterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-			sim[6] = getScoreBetweenDirectSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[7] = getScoreBetweenDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[8] = getScoreBetweenDirectDomainsOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);
-			sim[9] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
-		
+			sim[1] = getScoreBetweenSubterms((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
+			sim[2] = getScoreBetweenRangesOfProperties((OntModel) object1, (String) element1, (OntModel) object2, (String) element2);		
 			//substitute missing values (sim -1.0) by proper symbols ("?" in weka).
-			for (int i=0; i<=9; i++){
+			for (int i=0; i<=2; i++){
 				if (sim[i] == -1.0d) {
 					sim[i] = Utils.missingValue();
 					System.out.println("sim[" + i + "] " + sim[i]);
 				}
-			}
+			}			
+			
 			instance = new DenseInstance(1.0, sim);
 			try {
 				score = classifier_prop.classifyInstance(instance);
@@ -309,35 +336,25 @@ public class CosineSimilarityCLBetweenOntologyEntities extends WordVectorsCL imp
 			score = 0;
 		score = Math.min(score, 1.0); //in some particular cases SoftTFIDF slightly exceeds 1.0
 		score = Math.max(0,  score); 
-//			log.debug("Word2Vec-based relatedness between " + element1 + " and " + element2 + ": " + score);
 		log.info("Word2Vec-based relatedness between " + element1 + " and " + element2 + ": " + score);
+		//THRESHOLD
+		if (score < 0.2)
+			score = 0;
+		
 		return score;
 	}
 
 	//uncomment for testing
-	public static void main(String[] args) {
-			
-//				String ontology1 = "./test/cmt-en.owl";
-//				String uri1 = "http://cmt_en#c-2650356-3081301";
-//				String ontology2 = "./test/cmt-es.owl";
-//				String uri2 = "http://cmt_es#c-8133053-7135690";
-
-//				String ontology1 = "./ont/pt/cmt-pt.owl";
-//				String uri1 = "http://cmt_zh#c-2650356-3081301";
-//				String ontology2 = "./ont/nl/cmt-nl.owl";
-//				String uri2 = "http://cmt_ru#c-8133053-7135690";	
-		
-			String langS = "cz";
-			String langT = "nl";			
-			String ontology1 = "D:\\ont\\" + langS + "\\cmt-" + langS + ".owl";
-			String uri1 = "http://cmt_cz#c-3460865-4718819";
-			String ontology2 = "D:\\ont\\" + langT + "\\cmt-" + langT + ".owl";
-			String uri2 = "http://cmt_nl#c-4855446-2072057";
-		
-			CosineSimilarityCLBetweenOntologyEntities measure = new CosineSimilarityCLBetweenOntologyEntities(langS, langT);
-			
-			System.out.println(measure.getValue(OntologyExtractor.modelObtaining(ontology1), uri1 , OntologyExtractor.modelObtaining(ontology2), uri2));
-			log.info("finished");
-		}
+//	public static void main(String[] args) {			
+//			String ontology1 = "./test/cmt-en.owl";
+//			String uri1 = "http://cmt_en#c-2650356-3081301";
+//			String ontology2 = "./test/cmt-es.owl";
+//			String uri2 = "http://cmt_es#c-8133053-7135690";			
+//			String langS = "en";
+//			String langT = "es";		
+//			CosineSimilarityCLBetweenOntologyEntities measure = new CosineSimilarityCLBetweenOntologyEntities(langS, langT);			
+//			System.out.println(measure.getValue(OntologyExtractor.modelObtaining(ontology1), uri1 , OntologyExtractor.modelObtaining(ontology2), uri2));
+//			log.info("finished");
+//	}
 
 }
