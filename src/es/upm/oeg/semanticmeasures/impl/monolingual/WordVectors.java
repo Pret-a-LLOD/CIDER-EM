@@ -21,8 +21,10 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 public abstract class WordVectors implements Relatedness{
 	
-    /** Location (local file system) of the vectors. */	
+    /** Location (local file system) of the vectors.
+     * TODO this should be parameterized  */	
 	private static final String WORD_VECTORS_PATH = "./embeddings/monolingual/GoogleNews-vectors-negative300.bin.gz";
+	//private static final String WORD_VECTORS_PATH = "G:\\Unidades compartidas\\LanguageResources_LOD\\CIDER-EM_embeddings\\monolingual\\GoogleNews-vectors-negative300.bin.gz";
 	private static final Word2Vec vector = WordVectorSerializer.readWord2VecModel(WORD_VECTORS_PATH);
     
 	private Word2Vec vec;
