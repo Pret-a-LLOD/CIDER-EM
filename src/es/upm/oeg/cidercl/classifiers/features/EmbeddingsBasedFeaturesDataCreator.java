@@ -16,13 +16,14 @@ import com.hp.hpl.jena.ontology.OntResource;
 import es.upm.oeg.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 
 /**
- * Computes SoftTFIDF relatedness between the different elements (features) 
+ * Computes Embeddings-based relatedness between the different elements (features) 
  * of two ontology entities and stores the results in a structure that will be used for
  * training the classifier. 
  * 
  * This class is not intended to be used in isolation (it is called from "AlignerFromFeaturesDataGeneration")
  * 
  * @author Jorge Gracia
+ * @author Marta Lanau
  *
  */
 public class EmbeddingsBasedFeaturesDataCreator extends CosineSimilarityBetweenOntologyEntities{

@@ -16,6 +16,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 /**
  * Defines some basic methods to operate with the computation of the Cosine Similarity metric (see https://deeplearning4j.org/docs/latest/deeplearning4j-nlp-word2vec)
  *
+ * @author Marta Lanau
  */
 
 public abstract class WordVectors implements Relatedness{

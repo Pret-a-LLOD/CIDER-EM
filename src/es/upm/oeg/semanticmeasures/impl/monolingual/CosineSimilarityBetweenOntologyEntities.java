@@ -26,6 +26,8 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 
 /**
  * Computes the semantic similarity between two ontology entities based on the Cosine Similarity metric
+ * 
+ * @author Marta Lanau
  */
 public class CosineSimilarityBetweenOntologyEntities extends WordVectors implements RelatednessBetweenOntologyEntities{
 
@@ -353,6 +355,7 @@ public class CosineSimilarityBetweenOntologyEntities extends WordVectors impleme
 		log.debug("Word2Vec-based relatedness between " + element1 + " and " + element2 + ": " + score);
 
 		//THRESHOLD
+		//TODO Move this threshold from here
 		if (score < 0.2)
 			score = 0;
 		
@@ -361,18 +364,18 @@ public class CosineSimilarityBetweenOntologyEntities extends WordVectors impleme
 	}
 
 	//uncomment for testing
-//	public static void main(String[] args) {
-//			
-//			String uri1 = "http://oaei.ontologymatching.org/2011/benchmarks/101/onto.rdf#Article";
-//			String uri2 = "http://oaei.ontologymatching.org/2011/benchmarks/201/onto.rdf#hazdn";		
-//			String ontology1 = "http://oaei.ontologymatching.org/2011/benchmarks/101/onto.rdf";
-//			String ontology2 = "http://oaei.ontologymatching.org/2011/benchmarks/201/onto.rdf";			
-//			String lang = "en";
-//			
-//			CosineSimilarityBetweenOntologyEntities measure = new CosineSimilarityBetweenOntologyEntities(lang);
-//			
-//			System.out.println(measure.getValue(OntologyExtractor.modelObtaining(ontology1), uri1 , OntologyExtractor.modelObtaining(ontology2), uri2));
-//			log.info("finished");
-//	}
+	public static void main(String[] args) {
+			
+			String uri1 = "http://oaei.ontologymatching.org/2011/benchmarks/101/onto.rdf#Article";
+			String uri2 = "http://oaei.ontologymatching.org/2011/benchmarks/201/onto.rdf#hazdn";		
+			String ontology1 = "http://oaei.ontologymatching.org/2011/benchmarks/101/onto.rdf";
+			String ontology2 = "http://oaei.ontologymatching.org/2011/benchmarks/201/onto.rdf";			
+			String lang = "en";
+			
+			CosineSimilarityBetweenOntologyEntities measure = new CosineSimilarityBetweenOntologyEntities(lang);
+			
+			System.out.println(measure.getValue(OntologyExtractor.modelObtaining(ontology1), uri1 , OntologyExtractor.modelObtaining(ontology2), uri2));
+			log.info("finished");
+	}
 
 }

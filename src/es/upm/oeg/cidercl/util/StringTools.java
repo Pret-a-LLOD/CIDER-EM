@@ -8,7 +8,7 @@ package es.upm.oeg.cidercl.util;
 public class StringTools {
 
 	/**
-	 * Splits compound words that uses camelCase (e.g., "myTest -> "my Test")
+	 * Splits compound words that uses camelCase (e.g., from "myTest to "my Test")
 	 * Borrowed from http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
 	 * 
 	 * @param s compound word
