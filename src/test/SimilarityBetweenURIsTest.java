@@ -1,8 +1,7 @@
 package test;
 
-//please include cidercl.jar in classpath
-import es.upm.oeg.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
-import es.upm.oeg.semanticmeasures.impl.crosslingual.CosineSimilarityCLBetweenOntologyEntities;
+import es.unizar.sid.semanticmeasures.impl.crosslingual.CosineSimilarityCLBetweenOntologyEntities;
+import es.unizar.sid.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 import es.upm.oeg.cidercl.extraction.OntologyExtractor;
 
 public class SimilarityBetweenURIsTest {

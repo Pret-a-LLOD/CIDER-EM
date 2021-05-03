@@ -1,4 +1,4 @@
-package es.upm.oeg.semanticmeasures.impl.crosslingual;
+package es.unizar.sid.semanticmeasures.impl.crosslingual;
 
 
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import org.deeplearning4j.models.word2vec.Word2Vec;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import es.unizar.sid.semanticmeasures.Relatedness;
 import es.upm.oeg.cidercl.util.StopWords;
-import es.upm.oeg.semanticmeasures.Relatedness;
 import eu.monnetproject.wsd.utils.Language;
 
 
@@ -27,10 +27,13 @@ public abstract class WordVectorsCL implements Relatedness{
 	
 	public WordVectorsCL(String langS, String langT){		
 		//this.src_vec = src_vector;
-		String SRC_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/SRC_MAPPED_" + langS + ".EMB";
+		String SRC_VECTORS_PATH = "G:\\Unidades compartidas\\LanguageResources_LOD\\CIDER-EM_embeddings\\crosslingual\\" + langS + "-" + langT + "\\SRC_MAPPED_" + langS + ".EMB";
+		//String SRC_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/SRC_MAPPED_" + langS + ".EMB";
 		this.src_vec = WordVectorSerializer.readWord2VecModel(SRC_VECTORS_PATH);
 		//this.trg_vec = trg_vector;
-		String TRG_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/TRG_MAPPED_" + langT + ".EMB";
+		//String TRG_VECTORS_PATH = "./embeddings/crosslingual/" + langS + "-" + langT + "/TRG_MAPPED_" + langT + ".EMB";
+		String TRG_VECTORS_PATH = "G:\\Unidades compartidas\\LanguageResources_LOD\\CIDER-EM_embeddings\\crosslingual\\" + langS + "-" + langT + "\\TRG_MAPPED_" + langT + ".EMB";
+		
 		this.trg_vec = WordVectorSerializer.readWord2VecModel(TRG_VECTORS_PATH);
 		this.langS = langS;
 		this.langT = langT;

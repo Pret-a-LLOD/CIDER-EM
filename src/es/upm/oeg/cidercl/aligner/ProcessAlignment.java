@@ -146,17 +146,17 @@ public class ProcessAlignment {
 	}
 
 	//uncomment for testing
-//    public static void main(String[] args) throws Exception {
-//	
-//    	
-//    	URI o1 = new URI("file:./test/OAEI11/benchmark/101/onto.rdf");
-//    	URI o2 = new URI("file:./test/OAEI11/benchmark/203/onto.rdf");
-//    	
-//		String outputFile = "./test/CIDER-CL_101-203.rdf";
-//        double threshold = 0.0025;
-//    	ProcessAlignment align =  new ProcessAlignment(o1,o2, outputFile, threshold);
-//    	    	
-//    	align.run();
-//    }
+    public static void main(String[] args) throws Exception {
+	
+    	
+    	URI o1 = new URI("file:./test/OAEI11/benchmark/101/onto.rdf");
+    	URI o2 = new URI("file:./test/OAEI11/benchmark/203/onto.rdf");
+    	
+		String outputFile = "./test/CIDER-CL_101-203.rdf";
+        double threshold = 0.0025;
+    	ProcessAlignment align =  new ProcessAlignment(o1,o2, outputFile, threshold);
+    	    	
+    	align.run();
+    }
     
 }

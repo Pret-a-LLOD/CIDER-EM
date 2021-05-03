@@ -13,7 +13,7 @@ import weka.core.Utils;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
 
-import es.upm.oeg.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
+import es.unizar.sid.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 
 /**
  * Computes Embeddings-based relatedness between the different elements (features) 

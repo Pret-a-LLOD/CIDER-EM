@@ -28,10 +28,10 @@ import org.semanticweb.owl.align.Alignment;
 import org.semanticweb.owl.align.AlignmentProcess;
 import org.semanticweb.owl.align.AlignmentException;
 
+import es.unizar.sid.semanticmeasures.RelatednessBetweenOntologyEntities;
+import es.unizar.sid.semanticmeasures.impl.crosslingual.CosineSimilarityCLBetweenOntologyEntities;
+import es.unizar.sid.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 import es.upm.oeg.cidercl.extraction.OntologyExtractor;
-import es.upm.oeg.semanticmeasures.RelatednessBetweenOntologyEntities;
-import es.upm.oeg.semanticmeasures.impl.crosslingual.CosineSimilarityCLBetweenOntologyEntities;
-import es.upm.oeg.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 import fr.inrialpes.exmo.align.impl.DistanceAlignment;
 import fr.inrialpes.exmo.align.impl.MatrixMeasure;
 import fr.inrialpes.exmo.ontowrap.OntowrapException;

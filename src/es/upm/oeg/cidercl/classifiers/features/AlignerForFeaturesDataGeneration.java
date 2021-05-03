@@ -17,8 +17,8 @@ import org.semanticweb.owl.align.AlignmentException;
 
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import es.unizar.sid.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 import es.upm.oeg.cidercl.extraction.OntologyExtractor;
-import es.upm.oeg.semanticmeasures.impl.monolingual.CosineSimilarityBetweenOntologyEntities;
 import fr.inrialpes.exmo.align.impl.DistanceAlignment;
 import fr.inrialpes.exmo.align.impl.MatrixMeasure;
 import fr.inrialpes.exmo.ontowrap.OntowrapException;

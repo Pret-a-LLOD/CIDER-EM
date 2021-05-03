@@ -1,12 +1,12 @@
-package es.upm.oeg.semanticmeasures.impl.monolingual;
+package es.unizar.sid.semanticmeasures.impl.monolingual;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import es.unizar.sid.semanticmeasures.Relatedness;
 import es.upm.oeg.cidercl.util.StopWords;
 import es.upm.oeg.cidercl.util.StringTools;
-import es.upm.oeg.semanticmeasures.Relatedness;
 import eu.monnetproject.wsd.utils.Language;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -23,8 +23,8 @@ public abstract class WordVectors implements Relatedness{
 	
     /** Location (local file system) of the vectors.
      * TODO this should be parameterized  */	
-	private static final String WORD_VECTORS_PATH = "./embeddings/monolingual/GoogleNews-vectors-negative300.bin.gz";
-	//private static final String WORD_VECTORS_PATH = "G:\\Unidades compartidas\\LanguageResources_LOD\\CIDER-EM_embeddings\\monolingual\\GoogleNews-vectors-negative300.bin.gz";
+	//private static final String WORD_VECTORS_PATH = "./embeddings/monolingual/GoogleNews-vectors-negative300.bin.gz";
+	private static final String WORD_VECTORS_PATH = "G:\\Unidades compartidas\\LanguageResources_LOD\\CIDER-EM_embeddings\\monolingual\\GoogleNews-vectors-negative300.bin.gz";
 	private static final Word2Vec vector = WordVectorSerializer.readWord2VecModel(WORD_VECTORS_PATH);
     
 	private Word2Vec vec;

@@ -1,4 +1,4 @@
-package es.upm.oeg.semanticmeasures;
+package es.unizar.sid.semanticmeasures;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

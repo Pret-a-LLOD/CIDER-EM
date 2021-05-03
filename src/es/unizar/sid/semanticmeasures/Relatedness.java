@@ -1,4 +1,4 @@
-package es.upm.oeg.semanticmeasures;
+package es.unizar.sid.semanticmeasures;
 
 /**
  * Represents a relatedness relation
